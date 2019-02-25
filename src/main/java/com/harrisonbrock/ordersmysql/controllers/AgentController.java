@@ -1,7 +1,6 @@
 package com.harrisonbrock.ordersmysql.controllers;
 
 import com.harrisonbrock.ordersmysql.domain.Agent;
-import com.harrisonbrock.ordersmysql.repositories.AgnetRepository;
 import com.harrisonbrock.ordersmysql.services.AgentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +26,15 @@ public class AgentController {
 
     @GetMapping
     public ResponseEntity<?>  getAllAgents() {
-        List<Agent> agents = agentService.finddAllAgents();
+        List<Agent> agents = agentService.getAllAgents();
         return new ResponseEntity<>(agents, HttpStatus.OK);
+    }
+
+    @GetMapping("agentcode/{id}")
+    public ResponseEntity<?> getAgentById(@PathVariable long id) {
+
+        Agent agent = agentService.findAgentById(id);
+        return new ResponseEntity<>(agent, HttpStatus.OK);
     }
 
 }
