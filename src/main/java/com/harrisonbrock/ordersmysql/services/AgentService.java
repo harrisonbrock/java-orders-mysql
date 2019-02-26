@@ -50,4 +50,16 @@ public class AgentService {
             return updatedAgent;
         }
     }
+
+    public Agent deleteAgentById(long id) {
+        Optional<Agent> agent = repository.findById(id);
+
+        if (agent.isEmpty()) {
+            throw new AgentIdExeption("Cannot Delete Agent Id '" + id + "' because it does not exist");
+        }
+        else {
+            repository.deleteById(id);
+            return agent.get();
+        }
+    }
 }
