@@ -20,7 +20,7 @@ public class AgentController {
 
     @PostMapping("")
     public ResponseEntity<?> createNewAgent(@RequestBody Agent agent) {
-        Agent newAgent = agentService.saveOrUpdateAgent(agent);
+        Agent newAgent = agentService.saveAgent(agent);
         return new ResponseEntity<>(newAgent, HttpStatus.CREATED);
     }
 
@@ -35,6 +35,12 @@ public class AgentController {
 
         Agent agent = agentService.findAgentById(id);
         return new ResponseEntity<>(agent, HttpStatus.OK);
+    }
+
+    @PutMapping("/agentcode/{id}")
+    public ResponseEntity<?> updateAgentById(@PathVariable long id, @RequestBody Agent updateAgent) {
+        Agent currentAgent = agentService.updateAgentById(id, updateAgent);
+        return new ResponseEntity<>(currentAgent, HttpStatus.OK);
     }
 
 }

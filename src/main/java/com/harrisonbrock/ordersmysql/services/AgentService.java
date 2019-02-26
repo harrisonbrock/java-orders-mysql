@@ -17,7 +17,7 @@ public class AgentService {
         this.repository = repository;
     }
 
-    public Agent saveOrUpdateAgent(Agent agent) {
+    public Agent saveAgent(Agent agent) {
         return repository.save(agent);
     }
 
@@ -34,6 +34,20 @@ public class AgentService {
         else {
 
             return agent.get();
+        }
+    }
+
+    public Agent updateAgentById(long id, Agent updatedAgent) {
+        Optional<Agent> agent = repository.findById(id);
+
+        if (agent.isEmpty()) {
+            throw new AgentIdExeption("Cannot Update Agent Id '" + id + "' because it does not exist");
+        }
+        else  {
+            updatedAgent.setAgentcode(id);
+            repository.save(updatedAgent);
+            System.out.println(updatedAgent);
+            return updatedAgent;
         }
     }
 }
