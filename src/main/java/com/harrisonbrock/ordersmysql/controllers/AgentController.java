@@ -2,10 +2,13 @@ package com.harrisonbrock.ordersmysql.controllers;
 
 import com.harrisonbrock.ordersmysql.domain.Agent;
 import com.harrisonbrock.ordersmysql.services.AgentService;
+import com.harrisonbrock.ordersmysql.services.MapValidationErrorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -13,13 +16,18 @@ import java.util.List;
 public class AgentController {
 
     private final AgentService agentService;
+    private final MapValidationErrorService errorService;
 
-    public AgentController(AgentService agentService) {
+    public AgentController(AgentService agentService, MapValidationErrorService errorService) {
         this.agentService = agentService;
+        this.errorService = errorService;
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createNewAgent(@RequestBody Agent agent) {
+    public ResponseEntity<?> createNewAgent(@Valid @RequestBody Agent agent, BindingResult result) {
+        ResponseEntity<?> errors = errorService.mapValidationService(result);
+        if (errors != null) return errors;
+
         Agent newAgent = agentService.saveAgent(agent);
         return new ResponseEntity<>(newAgent, HttpStatus.CREATED);
     }
